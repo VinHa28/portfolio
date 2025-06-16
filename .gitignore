@@ -1,0 +1,16 @@
+# Backend
+portfolio-backend/node_modules/
+portfolio-backend/dist/
+portfolio-backend/.env
+
+# Frontend
+portfolio-frontend/node_modules/
+portfolio-frontend/dist/
+portfolio-frontend/.env
+
+# Logs
+*.log
+
+# System
+.DS_Store
+Thumbs.db

@@ -1,0 +1,14 @@
+# Node
+portfolio-backend/node_modules/
+portfolio-frontend/node_modules/
+
+# Build files
+portfolio-frontend/dist/
+portfolio-backend/dist/
+
+# Env files
+portfolio-backend/.env
+portfolio-frontend/.env
+
+# Logs
+*.log

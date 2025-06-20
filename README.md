@@ -5,9 +5,13 @@ This is a monorepo for my personal portfolio project, containing both the fronte
 ## 📁 Project Structure
 
 portfolio-project/
+
 ├── portfolio-frontend/ # Frontend application (ReactJS / Vite )
+
 ├── portfolio-backend/ # Backend application (NodeJS / Express / MongoDB)
+
 ├── .gitignore
+
 └── README.md
 
 -   **`portfolio-frontend/`**: Contains the frontend code. Built with [ReactJS](https://reactjs.org/) (or [Vite](https://vitejs.dev/)).

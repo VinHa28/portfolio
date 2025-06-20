@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import {
     EmailIcon,
     EyeIcon,
@@ -74,11 +74,21 @@ const TextInput = forwardRef((props, ref) => {
         setIsFocused(true);
         if (props.onFocus) props.onFocus(e);
     };
+
     const handleBlur = (e) => {
         const errorMessage = validator(e.target.value);
         setError(errorMessage);
         onChangeValid(!errorMessage);
     };
+
+    useEffect(() => {
+        if (isSubmitted) {
+            const errorMessage = validator(value);
+            setError(errorMessage);
+            onChangeValid(!errorMessage);
+            setIsSubmitted(!errorMessage);
+        }
+    }, [isSubmitted]);
 
     return (
         <div className={containerClassName}>

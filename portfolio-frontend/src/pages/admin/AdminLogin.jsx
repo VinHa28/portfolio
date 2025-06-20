@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextInput, { PasswordInput } from "../../components/forms/TextInput";
 import useAuth from "../../contexts/AuthContext";
@@ -24,84 +24,26 @@ const passwordValidator = (value) => {
 export default function AdminLogin() {
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-    });
-    const [errors, setErrors] = useState({});
+
+    // States
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors((prev) => ({
-                ...prev,
-                [name]: "",
-            }));
-        }
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-
-        if (!formData.username.trim()) {
-            newErrors.username = "Username is required";
-        }
-
-        if (!formData.password.trim()) {
-            newErrors.password = "Password is required";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    const formValid = useRef({
+        username: false,
+        password: false,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsLoading(true);
-        setErrors({});
-
-        try {
-            const response = await authApi.login(formData);
-            const { token, refreshToken } = response.data;
-
-            if (!token || !refreshToken) {
-                throw new Error("Invalid response: tokens missing");
-            }
-
-            login({ token, refreshToken });
-            navigate("/admin");
-        } catch (error) {
-            console.error("Login failed:", error);
-
-            // Handle different error types
-            if (error.response?.status === 401) {
-                setErrors({
-                    general: "Invalid username or password",
-                });
-            } else if (error.response?.status === 403) {
-                setErrors({
-                    general: "Access denied. Admin privileges required.",
-                });
-            } else {
-                setErrors({
-                    general: "Login failed. Please try again.",
-                });
-            }
-        } finally {
-            setIsLoading(false);
+        setIsSubmitted(true);
+        console.log(formValid.current);
+        if (Object.values(formValid.current).every((valid) => valid === true)) {
+            const formData = new FormData(e.target);
+            const body = Object.fromEntries(formData.entries());
+            console.log(body);  
         }
+        
     };
 
     return (
@@ -118,40 +60,42 @@ export default function AdminLogin() {
                 </div>
 
                 {/* General Error Message */}
-                {errors.general && (
+                {/* {errors.general && (
                     <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-red-700 text-sm font-medium">
                             {errors.general}
                         </p>
                     </div>
-                )}
+                )} */}
 
-                {/* Login Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Username Input */}
                     <TextInput
                         label="Username"
                         name="username"
                         type="text"
                         placeholder="Enter your username"
-                        // value={}
-                        onChangeValid={() => {}}
+                        onChangeValid={(isValid) => {
+                            formValid.current.username = isValid;
+                        }}
                         validator={usernameValidator}
                         disabled={isLoading}
                         containerClassName="mb-4"
                         rightIcon={<UserIcon />}
+                        isSubmitted={isSubmitted}
+                        setIsSubmitted={setIsSubmitted}
                     />
-                    {/* Password Input */}
                     <PasswordInput
                         label="Password"
                         name="password"
                         placeholder="Enter your password"
-                        value={formData.password}
-                        onChange={handleChange}
                         disabled={isLoading}
                         containerClassName="mb-6"
                         validator={passwordValidator}
-                        onChangeValid={() =>{}}
+                        onChangeValid={(isValid) => {
+                            formValid.current.password = isValid;
+                        }}
+                        isSubmitted={isSubmitted}
+                        setIsSubmitted={setIsSubmitted}
                     />
 
                     <Button

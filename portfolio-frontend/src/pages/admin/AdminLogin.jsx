@@ -8,7 +8,7 @@ import {
     checkLengthInRange,
     checkRequired,
 } from "../../utils/validateFunction";
-import Button from "../../components/commons/Button copy";
+import Button from "../../components/commons/Button";
 const usernameValidator = (value) => {
     let message =
         checkRequired("Username", value) ||

@@ -151,6 +151,7 @@ export default function AdminLogin() {
                         disabled={isLoading}
                         containerClassName="mb-6"
                         validator={passwordValidator}
+                        onChangeValid={() =>{}}
                     />
 
                     <Button

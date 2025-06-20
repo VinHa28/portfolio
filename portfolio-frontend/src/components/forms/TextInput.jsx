@@ -43,7 +43,7 @@ const TextInput = forwardRef((props, ref) => {
 
     const [isFocused, setIsFocused] = useState(false);
     const [error, setError] = useState(false);
-    const [value, setValue] = useState(defaultValue);
+    const [value, setValue] = useState(defaultValue || "");
 
     const baseInputClass = `
          w-full border rounded-md transition-all duration-200

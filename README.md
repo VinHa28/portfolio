@@ -164,8 +164,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Vinh Hà Văn**
 - GitHub: [@VinHa28](https://github.com/VinHa28)
-- Email: [your.email@example.com](mailto:your.email@example.com)
-- LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
+- Email: [vinhhv28@gmail.com](mailto:vinhhv28@gmail.com)
 
 ---
 

@@ -12,5 +12,5 @@ portfolio-frontend/.env
 *.log
 
 # System
-.DS_Store
 Thumbs.db
+.DS_Store

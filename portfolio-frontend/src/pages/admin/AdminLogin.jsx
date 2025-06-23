@@ -35,15 +35,27 @@ export default function AdminLogin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
         setIsSubmitted(true);
-        console.log(formValid.current);
         if (Object.values(formValid.current).every((valid) => valid === true)) {
             const formData = new FormData(e.target);
             const body = Object.fromEntries(formData.entries());
-            console.log(body);  
+            setIsLoading(true);
+            authApi
+                .login(body)
+                .then((response) => {
+                    const token = response.data.token;
+                    const refreshToken = response.data.token;
+                    console.log({ token, refreshToken });
+                    login({ token, refreshToken });
+                    navigate("/admin");
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
         }
-        
     };
 
     return (
@@ -58,16 +70,6 @@ export default function AdminLogin() {
                         Welcome back! Please sign in to continue.
                     </p>
                 </div>
-
-                {/* General Error Message */}
-                {/* {errors.general && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-red-700 text-sm font-medium">
-                            {errors.general}
-                        </p>
-                    </div>
-                )} */}
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <TextInput
                         label="Username"

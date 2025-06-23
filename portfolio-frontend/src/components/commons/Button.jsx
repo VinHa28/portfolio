@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 
 const Button = forwardRef(
     (
@@ -88,7 +88,7 @@ const Button = forwardRef(
             <button
                 onClick={handleClick}
                 className={baseClasses}
-                disabled={disabled}
+                disabled={disabled || isLoading}
                 {...props}
                 ref={ref}
             >

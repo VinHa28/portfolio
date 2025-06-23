@@ -1,4 +1,4 @@
-import { HTTP_METHOD } from "../../utils/constants";
+import { HTTP_METHOD } from "utils/constants";
 import { callApi } from "../config/callApi";
 import { url } from "./url";
 

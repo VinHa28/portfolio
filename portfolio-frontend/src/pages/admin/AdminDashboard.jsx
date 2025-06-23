@@ -1,12 +1,14 @@
-import React from "react";
-import useAuth from "../../contexts/AuthContext";
-import Button from "../../components/commons/Button";
+import useAuth from "contexts/AuthContext";
+import Button from "components/commons/Button";
 
 export default function () {
-    const {logout} = useAuth();
+    const { logout } = useAuth();
+    const handleLogOut = () => {
+        logout();
+    };
     return (
-        <div>
-            <Button>Logout</Button>
-        </div>
+        <>
+            <Button onClick={handleLogOut}>Logout</Button>
+        </>
     );
 }

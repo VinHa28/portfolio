@@ -1,14 +1,13 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TextInput, { PasswordInput } from "../../components/forms/TextInput";
-import useAuth from "../../contexts/AuthContext";
-import authApi from "../../api/services/authApi";
-import { UserIcon } from "../../components/icons/Icons";
-import {
-    checkLengthInRange,
-    checkRequired,
-} from "../../utils/validateFunction";
-import Button from "../../components/commons/Button";
+import authApi from "api/services/authApi";
+import { useToast } from "hooks/useToast";
+import useAuth from "contexts/AuthContext";
+import TextInput, { PasswordInput } from "components/forms/TextInput";
+import { UserIcon } from "components/icons/Icons";
+import Button from "components/commons/Button";
+import Toast, { ToastContainer } from "components/commons/Toast";
+import { checkLengthInRange, checkRequired } from "utils/validateFunction";
 const usernameValidator = (value) => {
     let message =
         checkRequired("Username", value) ||
@@ -24,6 +23,7 @@ const passwordValidator = (value) => {
 export default function AdminLogin() {
     const { login } = useAuth();
     const navigate = useNavigate();
+    const { toasts, removeToast, showToast } = useToast();
 
     // States
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -35,15 +35,29 @@ export default function AdminLogin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
         setIsSubmitted(true);
-        console.log(formValid.current);
         if (Object.values(formValid.current).every((valid) => valid === true)) {
             const formData = new FormData(e.target);
             const body = Object.fromEntries(formData.entries());
-            console.log(body);  
+            setIsLoading(true);
+            authApi
+                .login(body)
+                .then((response) => {
+                    const token = response.data.token;
+                    const refreshToken = response.data.token;
+                    console.log({ token, refreshToken });
+                    login({ token, refreshToken });
+                    navigate("/admin");
+                })
+                .catch((error) => {
+                    showToast.error(error?.response?.data?.message, {
+                        position: "top-center",
+                    });
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
         }
-        
     };
 
     return (
@@ -58,16 +72,6 @@ export default function AdminLogin() {
                         Welcome back! Please sign in to continue.
                     </p>
                 </div>
-
-                {/* General Error Message */}
-                {/* {errors.general && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-red-700 text-sm font-medium">
-                            {errors.general}
-                        </p>
-                    </div>
-                )} */}
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <TextInput
                         label="Username"
@@ -118,6 +122,16 @@ export default function AdminLogin() {
                     </p>
                 </div>
             </div>
+
+            <ToastContainer>
+                {toasts.map((toast) => (
+                    <Toast
+                        key={toast.id}
+                        {...toast}
+                        onClose={() => removeToast(toast.id)}
+                    />
+                ))}
+            </ToastContainer>
         </div>
     );
 }

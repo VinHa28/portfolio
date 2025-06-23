@@ -1,9 +1,8 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import AdminLogin from "./pages/admin/AdminLogin";
 import { AuthProvider } from "./contexts/AuthContext";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-
 function App() {
     return (
         <BrowserRouter>
@@ -36,7 +35,7 @@ const AdminRoutes = () => {
                 }
             />
 
-            <Route path="login" element={<AdminLogin/>}/>
+            <Route path="login" element={<AdminLogin />} />
         </Routes>
     );
 };

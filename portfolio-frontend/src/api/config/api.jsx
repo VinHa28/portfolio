@@ -66,7 +66,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        console.log("Response error status:", error.response?.status);
         const originalRequest = error.config;
 
         if (

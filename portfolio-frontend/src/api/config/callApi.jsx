@@ -1,4 +1,4 @@
-import { HTTP_METHOD } from "../../utils/constants";
+import { HTTP_METHOD } from "utils/constants";
 import api from "./api";
 
 const fetch = (url, method, body = {}, config = {}) => {

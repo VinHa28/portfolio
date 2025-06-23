@@ -1,14 +1,13 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TextInput, { PasswordInput } from "../../components/forms/TextInput";
-import useAuth from "../../contexts/AuthContext";
-import authApi from "../../api/services/authApi";
-import { UserIcon } from "../../components/icons/Icons";
-import {
-    checkLengthInRange,
-    checkRequired,
-} from "../../utils/validateFunction";
-import Button from "../../components/commons/Button";
+import authApi from "api/services/authApi";
+import { useToast } from "hooks/useToast";
+import useAuth from "contexts/AuthContext";
+import TextInput, { PasswordInput } from "components/forms/TextInput";
+import { UserIcon } from "components/icons/Icons";
+import Button from "components/commons/Button";
+import Toast, { ToastContainer } from "components/commons/Toast";
+import { checkLengthInRange, checkRequired } from "utils/validateFunction";
 const usernameValidator = (value) => {
     let message =
         checkRequired("Username", value) ||
@@ -24,6 +23,7 @@ const passwordValidator = (value) => {
 export default function AdminLogin() {
     const { login } = useAuth();
     const navigate = useNavigate();
+    const { toasts, removeToast, showToast } = useToast();
 
     // States
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,7 +50,9 @@ export default function AdminLogin() {
                     navigate("/admin");
                 })
                 .catch((error) => {
-                    console.log(error);
+                    showToast.error(error?.response?.data?.message, {
+                        position: "top-center",
+                    });
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -120,6 +122,16 @@ export default function AdminLogin() {
                     </p>
                 </div>
             </div>
+
+            <ToastContainer>
+                {toasts.map((toast) => (
+                    <Toast
+                        key={toast.id}
+                        {...toast}
+                        onClose={() => removeToast(toast.id)}
+                    />
+                ))}
+            </ToastContainer>
         </div>
     );
 }

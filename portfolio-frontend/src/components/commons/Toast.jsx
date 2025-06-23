@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     CheckIcon,
     InfoIcon,
@@ -41,36 +41,37 @@ export default function Toast(
             "top-right": {
                 entering: "transform translate-x-full opacity-0",
                 leaving: "transform translate-x-full opacity-0",
-                normal: "transform translate-x-0 opacity-100"
+                normal: "transform translate-x-0 opacity-100",
             },
             "top-left": {
                 entering: "transform -translate-x-full opacity-0",
                 leaving: "transform -translate-x-full opacity-0",
-                normal: "transform translate-x-0 opacity-100"
+                normal: "transform translate-x-0 opacity-100",
             },
             "top-center": {
                 entering: "transform -translate-y-full opacity-0",
                 leaving: "transform -translate-y-full opacity-0",
-                normal: "transform translate-y-0 opacity-100"
+                normal: "transform translate-y-0 opacity-100",
             },
             "bottom-right": {
                 entering: "transform translate-x-full opacity-0",
                 leaving: "transform translate-x-full opacity-0",
-                normal: "transform translate-x-0 opacity-100"
+                normal: "transform translate-x-0 opacity-100",
             },
             "bottom-left": {
                 entering: "transform -translate-x-full opacity-0",
                 leaving: "transform -translate-x-full opacity-0",
-                normal: "transform translate-x-0 opacity-100"
+                normal: "transform translate-x-0 opacity-100",
             },
             "bottom-center": {
                 entering: "transform translate-y-full opacity-0",
                 leaving: "transform translate-y-full opacity-0",
-                normal: "transform translate-y-0 opacity-100"
-            }
+                normal: "transform translate-y-0 opacity-100",
+            },
         };
 
-        const config = animationConfig[position] || animationConfig["top-right"];
+        const config =
+            animationConfig[position] || animationConfig["top-right"];
 
         if (isLeaving) {
             return config.leaving;
@@ -111,8 +112,7 @@ export default function Toast(
         "bottom-left": "fixed bottom-4 left-4",
         "bottom-center": "fixed bottom-4 left-1/2 -translate-x-1/2",
     };
-    
-    // Thêm pointer-events-auto để enable click events
+
     const baseClasses = `min-w-80 max-w-md rounded-lg flex items-center
                         justify-between px-4 py-3 transition-all
                         duration-300 ease-in-out z-50 pointer-events-auto shadow-lg`;
@@ -121,10 +121,9 @@ export default function Toast(
 
     // Side Effects
     useEffect(() => {
-        // Animation for entering
         const enterTimer = setTimeout(() => {
             setIsEntering(false);
-        }, 50);
+        }, 20);
 
         return () => clearTimeout(enterTimer);
     }, []);
@@ -137,9 +136,9 @@ export default function Toast(
             return () => clearTimeout(timer);
         }
     }, [autoClose, duration]);
-    
+
     if (!isVisible) return null;
-    
+
     return (
         <div
             className={`${baseClasses}
@@ -163,7 +162,8 @@ export default function Toast(
             {closable && (
                 <button
                     onClick={handleClose}
-                    className="flex-shrink-0 ml-4 inline-flex text-white hover:text-gray-200 focus:outline-none focus:text-gray-200 transition-colors duration-200"
+                    className="flex-shrink-0 ml-4 inline-flex transition-colors duration-200
+                             text-white hover:text-gray-200 focus:outline-none focus:text-gray-200 "
                 >
                     <XMarkIcon className="w-4 h-4" />
                 </button>

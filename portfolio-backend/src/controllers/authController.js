@@ -1,8 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
+import RefreshToken from "../models/RefreshToken.js";
 
-let refreshTokens = [];
+// let refreshTokens = [];
 
 export const login = async (req, res) => {
     const { username, password } = req.body;
@@ -26,7 +27,8 @@ export const login = async (req, res) => {
         const token = jwt.sign(
             {
                 id: user._id,
-                username: user.username
+                username: user.username,
+                email: user.email,
             },
             process.env.JWT_SECRET,
             { expiresIn: process.env.ACCESS_TOKEN_LIFE }
@@ -38,7 +40,15 @@ export const login = async (req, res) => {
             { expiresIn: '7d' }
         );
 
-        refreshTokens.push(refreshToken);
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+        await RefreshToken.create({
+            token: refreshToken,
+            userId: user._id,
+            expiresAt,
+        })
+
+        // refreshTokens.push(refreshToken);
 
         res.json({
             message: 'Login successful',
@@ -52,28 +62,44 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
     const { refreshToken } = req.body;
-    refreshTokens = refreshTokens.filter(token => token !== refreshToken);
-    res.json({ message: 'Logout successfully' });
-}
-
-export const refresh = (req, res) => {
-    const { refreshToken } = req.body;
-    if (!refreshToken)
-        return res.status(401).json({ message: "No refresh token provided." });
-    if (!refreshTokens.includes(refreshToken))
-        return res.status(403).json({ message: 'Invalid refresh token' });
+    if (!refreshToken) {
+        return res.status(400).json({ message: 'Refresh token is required.' });
+    }
 
     try {
-        const userData = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        await RefreshToken.deleteOne({ token: refreshToken });
+        res.json({ message: 'Logout successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const refresh = async (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(401).json({ message: "No refresh token provided." });
+    }
+
+    try {
+        const foundedToken = await RefreshToken.findOne({ token: refreshToken });
+        if (!foundedToken) {
+            return res.status(403).json({ message: "Invalid refresh token" });
+        }
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
         const newToken = jwt.sign(
-            { id: userData.id, username: userData.username },
+            { id: foundedToken.userId },
             process.env.JWT_SECRET,
             { expiresIn: process.env.ACCESS_TOKEN_LIFE }
         );
+
         res.json({ token: newToken });
-    } catch (err) {
-        res.status(403).json({ message: 'Invalid or expired refresh token' });
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ message: "Invalid or expired refresh token" });
     }
 }

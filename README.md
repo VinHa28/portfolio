@@ -109,6 +109,10 @@ PORT=5000
 NODE_ENV=development
 DATABASE_URL=your_database_url
 JWT_SECRET=your_jwt_secret
+ACCESS_TOKEN_LIFE=access_token_life_time
+JWT_REFRESH_SECRET=your_jwt_secret
+EMAIL_USER=youremail@example.com
+EMAIL_PASS=your_email_password(or app password)
 ```
 
 > **⚠️ Important:** Never commit your `.env` files to version control. They are already included in `.gitignore`.

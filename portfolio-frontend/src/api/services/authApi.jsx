@@ -9,6 +9,23 @@ const authApi = {
             method: HTTP_METHOD.POST,
             body,
         }),
-        
+    logout: (body) =>
+        callApi({
+            url: url.logout,
+            method: HTTP_METHOD.POST,
+            body,
+        }),
+    requestOtp: (body) =>
+        callApi({
+            url: url.requestOtp,
+            method: HTTP_METHOD.POST,
+            body,
+        }),
+    verifyOtp: (body) =>
+        callApi({
+            url: url.verifyOtp,
+            method: HTTP_METHOD.POST,
+            body,
+        }),
 };
 export default authApi;

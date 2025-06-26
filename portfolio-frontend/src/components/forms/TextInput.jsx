@@ -32,6 +32,8 @@ const TextInput = forwardRef((props, ref) => {
         setIsSubmitted,
         validator,
         onChangeValid,
+        autoComplete,
+        maxLength,
         ...restProps
     } = props;
 
@@ -42,8 +44,10 @@ const TextInput = forwardRef((props, ref) => {
     };
 
     const [isFocused, setIsFocused] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(false);
     const [error, setError] = useState(false);
-    const [value, setValue] = useState(defaultValue || "");
+    const [innerValue, setInnerValue] = useState(defaultValue || "");
+    const currentValue = props.value !== undefined ? props.value : innerValue;
 
     const baseInputClass = `
          w-full border rounded-md transition-all duration-200
@@ -62,16 +66,19 @@ const TextInput = forwardRef((props, ref) => {
     `;
 
     const onChange = (e) => {
-        setValue(e.target.value);
-        setTimeout(() => {
-            const errorMessage = validator(e.target.value);
-            onChangeValid(!errorMessage);
-            setError(errorMessage);
-        }, 300);
+        // if (readOnly) return;
+        if (props.value === undefined) {
+            setInnerValue(e.target.value);
+        }
+        if (props.onChange) {
+            props.onChange(e);
+        }
+        if (!hasInteracted) setHasInteracted(true);
     };
 
     const handleFocus = (e) => {
         setIsFocused(true);
+        if (!hasInteracted) setHasInteracted(true);
         if (props.onFocus) props.onFocus(e);
     };
 
@@ -83,12 +90,24 @@ const TextInput = forwardRef((props, ref) => {
 
     useEffect(() => {
         if (isSubmitted) {
-            const errorMessage = validator(value);
+            const errorMessage = validator(currentValue);
             setError(errorMessage);
             onChangeValid(!errorMessage);
             setIsSubmitted(!errorMessage);
         }
     }, [isSubmitted]);
+
+    useEffect(() => {
+        if (!hasInteracted) return;
+        const val = props.value !== undefined ? props.value : innerValue;
+        const handler = setTimeout(() => {
+            const errorMessage = validator(val);
+            setError(errorMessage);
+            onChangeValid(!errorMessage);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [props.value, innerValue, hasInteracted]);
 
     return (
         <div className={containerClassName}>
@@ -115,13 +134,15 @@ const TextInput = forwardRef((props, ref) => {
                     placeholder={placeholder}
                     id={name}
                     name={name}
-                    value={value}
+                    value={currentValue}
                     readOnly={readOnly}
                     disabled={disabled}
                     onChange={onChange}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     type={type}
+                    autoComplete={autoComplete}
+                    maxLength={maxLength}
                     {...restProps}
                 />
                 {rightIcon && (
@@ -155,7 +176,11 @@ export const PasswordInput = forwardRef((props, ref) => {
         setShowPassword(!showPassword);
     };
 
-    const RightIcon = showPassword ? <EyeIcon /> : <EyeSlashIcon />;
+    const RightIcon = showPassword ? (
+        <EyeIcon className="w-5 h-5 cursor-pointer" />
+    ) : (
+        <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
+    );
 
     return (
         <TextInput
@@ -163,6 +188,7 @@ export const PasswordInput = forwardRef((props, ref) => {
             type={showPassword ? "text" : "password"}
             rightIcon={RightIcon}
             onRightIconClick={togglePasswordVisibility}
+            autoComplete="current-password"
             {...props}
         />
     );
@@ -208,6 +234,7 @@ export const EmailInput = forwardRef(
                 ref={ref}
                 type="email"
                 placeholder="email@example.com"
+                autoComplete="email"
                 {...iconProps}
                 {...props}
             />

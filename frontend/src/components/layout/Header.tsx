@@ -29,7 +29,7 @@ export default function Header() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g clip-path="url(#clip0_6_9647)">
+                <g clipPath="url(#clip0_6_9647)">
                   <path
                     d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"
                     fill="currentColor"

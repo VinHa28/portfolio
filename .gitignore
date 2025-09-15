@@ -1,12 +1,12 @@
 # Backend
 backend/node_modules/
-back-end/dist/
-back-end/.env
+backend/dist/
+backend/.env
 
 # Frontend
-front-end/node_modules/
-front-end/dist/
-front-end/.env
+frontend/node_modules/
+frontend/dist/
+frontend/.env
 
 # Logs
 *.log

@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --hero-bg: #ffffff;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --hero-bg: #111111;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", sans-serif;
+  @apply transition-colors duration-300;
+}
+
+.linear-text {
+  background-image: linear-gradient(
+    90deg,
+    #9845e8 0%,
+    #33d2ff 30%,
+    #dd5789 50%
+  );
+  color: transparent;
+  background-clip: text;
+}

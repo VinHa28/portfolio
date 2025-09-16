@@ -30,33 +30,28 @@ body {
   background-clip: text;
 }
 
-.social-btn {
+.btn {
   @apply cursor-pointer flex items-center justify-center;
 }
 
-.social-btn span {
+.btn span {
   transition: all 0.2s;
 }
 
-.social-btn:hover span {
+.btn:hover span {
   background-color: transparent;
   color: white;
 }
 
-.linear-border--blue {
-  background-image: linear-gradient(
-    30deg,
-    #9358f7 0%,
-    #3bade9 50%,
-    #2ebae7 100%
-  );
+.linear-border--purple-blue {
+  background-image: linear-gradient(30deg, #9358f7 0%, #2ebae7 100%);
 }
 
-.linear-border--purple {
+.linear-border--purple-pink {
   background-image: linear-gradient(150deg, #6964de 0%, #fca6e9 100%);
 }
 
-.linear-border--red {
+.linear-border--red-yellow {
   background-image: linear-gradient(30deg, #f4426c 0%, #fbf2b1 100%);
 }
 

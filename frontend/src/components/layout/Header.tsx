@@ -1,5 +1,5 @@
 import Button from "@/components/common/Button";
-import { DownloadIcon } from "@/components/icons";
+import { DownloadIcon } from "@/components/common/icons";
 import ToggleTheme from "@/components/ToggleTheme";
 import Link from "next/link";
 import React from "react";

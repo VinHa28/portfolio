@@ -35,9 +35,7 @@ export default function Button({
 }: ButtonProps) {
   const inner = (
     <span
-      className={`bg-[var(--background)] gap-[${
-        size === "sm" ? "4px" : "10px"
-      }] w-full h-full rounded-[3px] flex justify-center items-center px-2`}
+      className={`bg-[var(--background)] gap-[${size === 'sm' ? "4px" : "10px"}] w-full h-full rounded-[3px] flex justify-center items-center px-2`}
     >
       {icon}
       {children}

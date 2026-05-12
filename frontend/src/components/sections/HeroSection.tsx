@@ -1,5 +1,5 @@
 import Button from "@/components/common/Button";
-import { EmailIcon, FacebookIcon, GitHubIcon } from "@/components/icons";
+import { EmailIcon, FacebookIcon, GitHubIcon } from "@/components/common/icons";
 import React from "react";
 
 export default function HeroSection() {
@@ -18,7 +18,7 @@ export default function HeroSection() {
         <div className="mt-[194px] flex space-x-[8px]">
           <Button
             color="purple-blue"
-            className="w-[200px]"
+            className="w-[200px] flex items-center gap-[10px]"
             icon={<EmailIcon />}
             href="/"
           >
@@ -27,15 +27,15 @@ export default function HeroSection() {
           <Button
             href="https://github.com/VinHa28"
             color="purple-pink"
-            className="w-[200px]"
+            className="w-[200px] flex items-center gap-[10px]"
             icon={<GitHubIcon />}
           >
             Github
           </Button>
           <Button
             href="https://www.facebook.com/vanvinh.ha.52"
-            color="purple-pink"
-            className="w-[200px]"
+            color="purple-bold"
+            className="w-[200px] flex items-center gap-[10px]"
             icon={<FacebookIcon />}
           >
             Facebook

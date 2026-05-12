@@ -12,7 +12,7 @@ export interface TechItem {
 
 export const TechCard = ({ name, src, width, height, fillColor }: TechItem) => {
   return (
-    <li className="flex flex-col items-center w-1/2 sm:w-1/4 md:w-1/6 lg:w-[12.5%] cursor-pointer">
+    <li className="flex flex-col items-center w-1/2 sm:w-1/4 md:w-1/6 lg:w-[12.5%]">
       <div className="flex items-center justify-center w-[64px] h-[64px]">
         <ReactSVG
           src={src}
